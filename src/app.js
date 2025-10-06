@@ -1,17 +1,24 @@
 const express=require('express');
 const connectDB=require("./config/database");
 const User=require("./models/user");
+const {validateSignUpData}=require("./utils/validation");
+const bcrypt=require('bcrypt');
 const app=express();
 app.use(express.json());
 app.post("/signup", async(req,res)=>{
     try{
-        const user=new User(req.body);
+        validateSignUpData(req);
+        const {firstName,lastName,password,emailId}=req.body;
+        const passwordHash= await bcrypt.hash(password,10);
+        const user=new User({
+            firstName,lastName,emailId,password:passwordHash,
+        });
         await user.save();
         res.send("User Added SuccessFully");
 
      }
      catch(err){
-        res.status(404).send("something went wrong");
+        res.status(404).send("Error:"+err.message);
      }
 });
 app.delete("/user", async(req,res)=>{
