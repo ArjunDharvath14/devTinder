@@ -25,16 +25,26 @@ app.delete("/user", async(req,res)=>{
         res.status(404).send("something went wrong");
      }
 })
-app.patch("/user",async(req,res)=>{
+app.patch("/user/:userId",async(req,res)=>{
     try{
-        const userId=req.body.userId;
+        const userId=req.params?.userId;
         const data=req.body;
+        const Allowed_Updates=["skills","age","about","gender","photoUrl"];
+        const isAllowed=Object.keys(data).every((k)=>Allowed_Updates.includes(k));
+        if(!isAllowed)
+        {
+            throw new Error("Update is not Allowed");
+        }
+        if(data.skills.length>10)
+        {
+            throw new Error("Skills Can't be more than 10");
+        }
         await User.findByIdAndUpdate(userId,data,{runValidators:true});
         res.send("user updated successfully")
 
     }
     catch(err){
-        res.status(404).send("something went wrong");
+        res.status(404).send("Update Failed:"+err.message);
      }
 })
 app.get("/user", async(req,res)=>{
