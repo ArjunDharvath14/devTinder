@@ -2,6 +2,7 @@ const express=require('express');
 const {validateSignUpData}=require("../utils/validation");
 const User=require("../models/user");
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
 const authRouter=express.Router();
 authRouter.post("/signup", async(req,res)=>{
     try{
@@ -39,6 +40,12 @@ authRouter.post("/login",async (req,res) => {
     catch(err){
         res.status(404).send("Error:"+err.message);
      }
+});
+authRouter.post("/logout",async (req,res) => {
+    res.cookie("token",null,{expires:new Date(Date.now()),})
+    res.send("Logout SuccessFul");
+    
+    
 });
 
 module.exports=authRouter;
