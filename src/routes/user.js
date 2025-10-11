@@ -6,7 +6,7 @@ const User=require("../models/user");
 const SAFE_DATA="firstName lastName age gender about skills photoUrl"
 userRouter.get("/user/requests/received",userAuth,async (req,res) => {
     try{const loggedInUser=req.user;
-    const data= await connectionRequest.find({toUserId:loggedInUser._id,status:"interested"}).populate("fromUserId", ["firstName","lastName"]);;
+    const data= await connectionRequest.find({toUserId:loggedInUser._id,status:"interested"}).populate("fromUserId", ["firstName","lastName","age","about","photoUrl","gender"]);;
     res.json({message:"all the requests",data});}
     catch(err){
         res.status(404).send("Error:"+err.message);
@@ -40,7 +40,7 @@ userRouter.get("/user/connections",userAuth,async (req,res) => {
 userRouter.get("/feed",userAuth,async (req,res) => {
     try{
         const page=parseInt(req.query.page)|| 1;
-        const limit=parseInt(req.query.limit)|| 10;
+        let limit=parseInt(req.query.limit)|| 10;
         limit=limit>50 ? 50 :limit;
         const skip=(page-1)*limit;
          const loggedInUser=req.user;

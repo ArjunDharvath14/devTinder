@@ -15,7 +15,7 @@ const validateSignUpData=(req)=>{
     }
 };
 const validateEditProfileData=(req)=>{
-    allowedEditFields=["firstName","lastName","emailId","photoURl","gender","age","about","skills",];
+    allowedEditFields=["firstName","lastName","emailId","photoUrl","gender","age","about","skills",];
     const isEditAllowed=Object.keys(req.body).every((field)=>allowedEditFields.includes(field));
     return isEditAllowed;
 }

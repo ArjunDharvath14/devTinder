@@ -12,8 +12,10 @@ authRouter.post("/signup", async(req,res)=>{
         const user=new User({
             firstName,lastName,emailId,password:passwordHash,
         });
-        await user.save();
-        res.send("User Added SuccessFully");
+        const savedUser=await user.save();
+        const token= await savedUser.getJWT(); 
+        res.cookie("token",token);
+        res.json({message:"User Added SuccessFully",data:savedUser});
 
      }
      catch(err){
@@ -35,7 +37,7 @@ authRouter.post("/login",async (req,res) => {
         }
         const token= await user.getJWT(); 
         res.cookie("token",token);
-        res.send("Login SuccessFul");
+        res.send(user);
     }
     catch(err){
         res.status(404).send("Error:"+err.message);
