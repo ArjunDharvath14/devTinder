@@ -22,5 +22,5 @@ app.use("/",userRouter);
 connectDB()
 .then(()=>{console.log("DataBase Connection Established");
     app.listen(port,()=>{
-    console.log("Server is Successfully listening on port 1814");})})
+    console.log("Server is Successfully listening on port "+port);})})
 .catch((err)=>{console.error("Database is not connected")});
