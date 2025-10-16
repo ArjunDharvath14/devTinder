@@ -7,6 +7,9 @@ const app=express();
 app.use(cors({origin:"http://localhost:5173",credentials:true,}));
 app.use(express.json());
 app.use(CookieParser());
+require('dotenv').config();
+const port = process.env.PORT;
+const dbUrl = process.env.DB_URL;
 const authRouter=require("./routes/auth");
 const profileRouter=require("./routes/profile");
 const requestRouter=require("./routes/request");
@@ -18,6 +21,6 @@ app.use("/",userRouter);
 
 connectDB()
 .then(()=>{console.log("DataBase Connection Established");
-    app.listen(1814,()=>{
+    app.listen(port,()=>{
     console.log("Server is Successfully listening on port 1814");})})
 .catch((err)=>{console.error("Database is not connected")});

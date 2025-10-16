@@ -2,6 +2,8 @@ const mongoose=require('mongoose');
 const validator=require('validator');
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
+require('dotenv').config();
+const jwt_secret = process.env.JWT_SECRET;
 const userSchema= new mongoose.Schema(
     {
         firstName:{
@@ -68,7 +70,7 @@ const userSchema= new mongoose.Schema(
 );
 userSchema.methods.getJWT=async function(){
     const user=this;
-    const token= await jwt.sign({_id:user._id},"DEV@TINDER14",{expiresIn:"1d"});
+    const token= await jwt.sign({_id:user._id},jwt_secret,{expiresIn:"1d"});
     return token;
 }
 userSchema.methods.validatePassword=async function(passwordByinput){
